@@ -43,27 +43,26 @@ logger = logging.getLogger(__name__)
 # Explicitly load .env file from the script's directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 dotenv_path = os.path.join(BASE_DIR, '.env')
-if not os.path.exists(dotenv_path):
-    logger.error(f".env file not found at {dotenv_path}")
-    exit(1)
-load_dotenv(dotenv_path)
 
-# Environment variables
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+    logger.info(f".env loaded from {dotenv_path}")
+else:
+    logger.warning(f".env file not found at {dotenv_path}. Relying on environment variables.")
+
+# Environment variables (теперь без exit, если не заданы — логгер предупредит)
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-DEFAULT_BURN = float(os.getenv("DEFAULT_BURN", "0.25"))  # 25%
+DEFAULT_BURN = float(os.getenv("DEFAULT_BURN", "0.25"))
 TEAM_ANNOUNCEMENT_CHANNEL = os.getenv("TEAM_ANNOUNCEMENT_CHANNEL")
-if not TEAM_ANNOUNCEMENT_CHANNEL:
-    logger.warning("TEAM_ANNOUNCEMENT_CHANNEL not set, public team announcements will use the command's channel")
 
-# Validate environment variables
+# Добавь проверки без exit — пусть бот запустится, но выдаст ошибку в логах
 if not DISCORD_BOT_TOKEN:
     logger.error("DISCORD_BOT_TOKEN environment variable is missing or empty")
-    exit(1)
+    # Не exit, а просто не запусти бот: bot.run не вызовется ниже
 if not SUPABASE_URL or not SUPABASE_KEY:
     logger.error("SUPABASE_URL or SUPABASE_KEY environment variable is missing or empty")
-    exit(1)
 
 # Initialize Supabase client
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
