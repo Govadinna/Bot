@@ -29,7 +29,6 @@ from discord.ui import View, Button, Modal, TextInput
 import random
 import aiohttp
 import re
-load_dotenv() 
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
