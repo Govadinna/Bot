@@ -98,9 +98,8 @@ async def update_lobby_message(channel: discord.VoiceChannel):
     else:
         participants = "Пока никого нет"
 
-    embed = discord.Embed(title="Парти Гейм 208", color=color)
+    embed = discord.Embed(title="Открытое лобби", color=color)
     embed.add_field(name="Участники:", value=participants, inline=False)
-    embed.add_field(name="Доступ:", value="Любой ранг", inline=False)
     embed.add_field(name=" ", value=f"**+ {free}**" if free > 0 else "**Заполнено**", inline=False)
 
     announce = bot.get_channel(ANNOUNCE_CHANNEL_ID)
@@ -140,3 +139,4 @@ async def on_voice_state_update(member, before, after):
 
 
 bot.run(os.getenv("TOKEN"))
+
