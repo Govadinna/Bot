@@ -25,6 +25,7 @@ load_dotenv()
 intents = discord.Intents.default()
 intents.members = True
 intents.voice_states = True
+intents.message_content = True
 intents.guilds = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
@@ -139,4 +140,5 @@ async def on_voice_state_update(member, before, after):
 
 
 bot.run(os.getenv("TOKEN"))
+
 
